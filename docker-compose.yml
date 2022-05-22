@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+    vb2csharp:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "40163:80"
+        restart: always
+        tty: true

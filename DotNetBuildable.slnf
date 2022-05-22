@@ -1,0 +1,9 @@
+{
+  "solution": {
+    "path": "CodeConverter.sln",
+    "projects": [
+      "CodeConverter\\CodeConverter.csproj",
+      "Api\\Api.csproj"
+    ]
+  }
+}
