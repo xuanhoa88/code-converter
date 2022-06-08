@@ -6,6 +6,6 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - "40163:80"
+            - "40163:40163"
         restart: always
         tty: true

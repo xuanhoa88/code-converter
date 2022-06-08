@@ -102,7 +102,10 @@ internal class HandledEventsAnalyzer
             case KeywordEventContainerSyntax _:
                 return new HandledEventsAnalysis.EventContainer(HandledEventsAnalysis.EventContainerKind.This, null);
             case WithEventsEventContainerSyntax weecs:
-                return new HandledEventsAnalysis.EventContainer(HandledEventsAnalysis.EventContainerKind.Property, semanticModel.GetSymbolInfo(weecs).Symbol.Name);
+                if (semanticModel.GetDeclaredSymbol(weecs) == null) {
+                    return new HandledEventsAnalysis.EventContainer(HandledEventsAnalysis.EventContainerKind.This, null);
+                }
+                return new HandledEventsAnalysis.EventContainer(HandledEventsAnalysis.EventContainerKind.Property, semanticModel.GetDeclaredSymbol(weecs).Name);
             case WithEventsPropertyEventContainerSyntax wepecs:
                 return new HandledEventsAnalysis.EventContainer(HandledEventsAnalysis.EventContainerKind.Property, wepecs.Property.Identifier.Text);
             default:

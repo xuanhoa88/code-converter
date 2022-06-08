@@ -9,7 +9,16 @@ builder.Services.AddSwaggerGen(c => {
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddCors();
+
+string localOrigins = "local";
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: localOrigins, x => x
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(_ => true) // allow any origin
+        .AllowCredentials() // allow credentials
+    );
+});
 
 var app = builder.Build();
 
@@ -22,16 +31,14 @@ if (!app.Environment.IsDevelopment()) {
 
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true) // allow any origin
-    .AllowCredentials()); // allow credentials
+app.UseCors(localOrigins);
 
 app.MapPost("/api/convert", async (ConvertRequest request) => await ApiConverter.ConvertAsync(request))
+    .RequireCors(localOrigins)
     .Produces<ConvertResponse>();
 
 app.MapGet("/api/version", () => CodeConverterVersion.GetVersion())
+    .RequireCors(localOrigins)
     .Produces<string>();
 
 app.Run();
